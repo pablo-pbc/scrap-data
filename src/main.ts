@@ -1,5 +1,8 @@
+import { Actor } from 'apify'
 import { PlaywrightCrawler, log } from 'crawlee'
 import { router } from './route.js'
+
+await Actor.init()
 
 // This is better set with CRAWLEE_LOG_LEVEL env var
 // or a configuration option. This is just for show 😈
@@ -17,3 +20,5 @@ const crawler = new PlaywrightCrawler({
 })
 
 await crawler.run(['https://warehouse-theme-metal.myshopify.com/collections'])
+
+await Actor.exit()
