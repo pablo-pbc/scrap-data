@@ -1,4 +1,4 @@
-export const BASE_URL: string = 'https://www.arezzo.com.br';
+export const BASE_URL: string = 'https://www.nike.com.br';
 
 // HANDLERS LABELS
 export const labels: { [key: string]: string } = {
@@ -7,22 +7,22 @@ export const labels: { [key: string]: string } = {
 };
 
 // CATEGORY SELECTOR
-export const CATEGORY_URL: string = 'a[data-testid="ta-header-category-title"]';
+export const CATEGORY_URL: string = '';
 
 // NEXT PAGE SELECTOR
-export const NEXT_PAGE: string = 'button.see-more-products-container__button';
+export const NEXT_PAGE: string = 'a[title="Ir para próxima página"]';
 
 // PRODUCT SELECTORS
-export const PRODUCT_URL: string = 'a[data-testid="ta-product-link"]';
-export const PRODUCT_NAME: string = 'h1[data-testid="ta-product-name"]';
-export const PRODUCT_CODE: string = 'p[data-testid="ta-product-information__SKU"]';
-export const PRODUCT_COLOR: string = 'span[data-testid^="ta-more-colors__current-color-name"]';
-export const PRODUCT_DESCRIPTION: string = 'div[data-testid="ta-product_description"]';
-export const PRODUCT_PRICE: string = 'span[data-testid="ta-product-price"]';
-export const PRODUCT_SPECIAL_PRICE: string = 'span[data-testid="ta-product-price-now"]';
-export const PRODUCT_IMAGES: string = 'img[data-testid="ta-product-gallery__photo"]';
-export const PRODUCT_MATERIAL: string = 'p[data-testid="ta-product-details__material"]';
+export const PRODUCT_URL: string = 'div[data-testid="products-search-3"] > div a';
+export const PRODUCT_NAME: string = 'h1[data-testid="product-name"]';
+export const PRODUCT_CODE: string = 'div[data-testid="product-info-container"] > ul > li:nth-child(2)';
+export const PRODUCT_COLOR: string = 'li[data-testid="color-description"]';
+export const PRODUCT_DESCRIPTION: string = 'div[data-testid="tech-info"] > div > div > p:nth-child(1)';
+export const PRODUCT_PRICE: string = 'span.bPYemK';
+export const PRODUCT_SPECIAL_PRICE: string = 'span[data-testid="pricebox"]';
+export const PRODUCT_IMAGES: string = 'ul[data-testid="main-image"] > li > a > span > img';
+export const PRODUCT_MATERIAL: string = '';
 export const PRODUCT_COLLECTION: string = '';
 export const PRODUCT_GENDER: string = '';
-export const PRODUCT_CATEGORY: string = 'ul[class="breadcrumb-list"] > li';
-export const PRODUCT_BRAND: string = 'Arezzo';
+export const PRODUCT_CATEGORY: string = 'span[itemprop="name"]';
+export const PRODUCT_BRAND: string = 'Nike';

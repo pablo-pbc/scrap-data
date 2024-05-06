@@ -27,21 +27,21 @@ router.addHandler(labels.PRODUCT, async ({ request, page, log }) => {
   const code = await page.locator(PRODUCT_CODE).textContent();   
   const price = await page.locator(PRODUCT_PRICE).textContent();
   const category = await page.locator(PRODUCT_CATEGORY).allInnerTexts(); 
-  const description = await page.locator(PRODUCT_DESCRIPTION).textContent();
 
   const brand = PRODUCT_BRAND;
   const collection = PRODUCT_COLLECTION;
   const gender = PRODUCT_GENDER;
+  const material = PRODUCT_MATERIAL;
+
+  const description = await page.evaluate((selector) => {
+    const element = document.querySelector(selector);
+    return element ? element.textContent : "";
+  }, PRODUCT_DESCRIPTION);
 
   const color = await page.evaluate((selector) => {
     const element = document.querySelector(selector);
-    return element ? element.textContent : "padrao";
+    return element ? element.getAttribute('data-description') : "padrao";
   }, PRODUCT_COLOR);
-
-  const material = await page.evaluate((selector) => {
-    const element = document.querySelector(selector);
-    return element ? element.textContent : "";
-  }, PRODUCT_MATERIAL);
 
   const special_price = await page.evaluate((selector) => {
     const element = document.querySelector(selector);
@@ -56,12 +56,12 @@ router.addHandler(labels.PRODUCT, async ({ request, page, log }) => {
   const results = {
     url: request.url,
     name,
-    code,
+    code: code?.split('Estilo: ')[1],
     color,
     brand,
     collection,
     gender,
-    description,
+    description: description != "" && description ? description : name,
     price,
     special_price,
     material,
