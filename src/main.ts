@@ -9,7 +9,7 @@ log.setLevel(log.LEVELS.DEBUG)
 log.debug('Setting up crawler.')
 
 const crawler = new PlaywrightCrawler({
-  maxRequestsPerCrawl: 200,
+  // maxRequestsPerCrawl: 200,
   requestHandler: router,
   headless: true
 })
