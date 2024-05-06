@@ -86,13 +86,10 @@ router.addDefaultHandler(async ({ request, page, enqueueLinks, log }) => {
 
   const nextButton = await page.$(NEXT_PAGE);
   if (nextButton) {
-    await nextButton.click();
-
-    const nextPageUrl = page.url();
-    log.debug(`Next Page URL: ${nextPageUrl}`);
+    log.debug(`Next Page URL: ${NEXT_PAGE}`);
 
     await enqueueLinks({
-      urls: [nextPageUrl]
+      selector: NEXT_PAGE
     });
   }
 });
