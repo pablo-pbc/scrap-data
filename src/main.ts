@@ -9,13 +9,14 @@ log.setLevel(log.LEVELS.DEBUG)
 log.debug('Setting up crawler.')
 
 const crawler = new PlaywrightCrawler({
-  maxRequestsPerCrawl: 50,
+  maxRequestsPerCrawl: 200,
   requestHandler: router,
   headless: true
 })
 
 const Urls: string[] = [
   `${BASE_URL}/c/sapatos`,
+  `${BASE_URL}/c/bolsas`,
 ];
 
 await crawler.run(Urls)

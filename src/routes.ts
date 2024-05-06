@@ -1,7 +1,6 @@
-import { createPlaywrightRouter, Dataset } from 'crawlee'
+import { createPlaywrightRouter, Dataset, handleRequestTimeout } from 'crawlee'
 import { 
   labels, 
-  BASE_URL,
   CATEGORY_URL,
   NEXT_PAGE,
   PRODUCT_URL,
@@ -24,33 +23,50 @@ export const router = createPlaywrightRouter();
 router.addHandler(labels.PRODUCT, async ({ request, page, log }) => {
   log.debug(`Extracting data: ${request.url}`);
 
-  page.waitForSelector(PRODUCT_CODE)
-
   const name = await page.locator(PRODUCT_NAME).textContent();
-  const code = await page.locator(PRODUCT_CODE).textContent();
-  const color = await page.locator(PRODUCT_COLOR).textContent();  
+  const code = await page.locator(PRODUCT_CODE).textContent();   
   const price = await page.locator(PRODUCT_PRICE).textContent();
-  const material = await page.locator(PRODUCT_MATERIAL).textContent();
-  const category = await page.locator(PRODUCT_CATEGORY).allTextContents();
-  const special_price = await page.locator(PRODUCT_SPECIAL_PRICE).textContent();  
+  const category = await page.locator(PRODUCT_CATEGORY).allInnerTexts(); 
   const description = await page.locator(PRODUCT_DESCRIPTION).textContent();
+
   const brand = PRODUCT_BRAND;
   const collection = PRODUCT_COLLECTION;
   const gender = PRODUCT_GENDER;
+
+  const color = await page.evaluate((selector) => {
+    const element = document.querySelector(selector);
+    return element ? element.textContent : "padrao";
+  }, PRODUCT_COLOR);
+
+  const material = await page.evaluate((selector) => {
+    const element = document.querySelector(selector);
+    return element ? element.textContent : "";
+  }, PRODUCT_MATERIAL);
+
+  const special_price = await page.evaluate((selector) => {
+    const element = document.querySelector(selector);
+    return element ? element.textContent : "R$ 00,00";
+  }, PRODUCT_SPECIAL_PRICE);
+
+  const imagesLocator = await page.locator(PRODUCT_IMAGES).all();
+  const images = await Promise.all(imagesLocator.slice(0,4).map(async (element) => {
+      return await element.getAttribute('src');
+  }));
   
   const results = {
     url: request.url,
     name,
     code,
-    color: color ?? "padrao",
+    color,
     brand,
-    collection: collection ?? "",
-    gender: gender ?? "",
-    description: description ?? "",
+    collection,
+    gender,
+    description,
     price,
-    special_price: special_price ?? "",
-    material: material ?? "",
-    category
+    special_price,
+    material,
+    category: category.join(' > '),
+    images
   };
 
   log.debug(`Saving data: ${request.url}`);
@@ -58,31 +74,25 @@ router.addHandler(labels.PRODUCT, async ({ request, page, log }) => {
   await Dataset.exportToJSON('saved-products');
 });
 
-router.addHandler(labels.CATEGORY, async ({ page, enqueueLinks, request, log }) => {
-    log.debug(`Enqueueing pagination for: ${request.url}`);
-
-    await page.waitForSelector(PRODUCT_URL);
-    await enqueueLinks({
-      selector: PRODUCT_URL,
-      label: labels.PRODUCT
-    });
-
-    const nextButton = await page.$(NEXT_PAGE);
-    if (nextButton) {
-      await enqueueLinks({
-        selector: NEXT_PAGE,
-        label: labels.CATEGORY
-      });
-    };
-  }
-);
-
 router.addDefaultHandler(async ({ request, page, enqueueLinks, log }) => {
-  log.debug(`Enqueueing categories from page: ${request.url}`);
+  log.debug(`Enqueueing pagination for: ${request.url}`);
 
-  await page.waitForSelector(CATEGORY_URL);
+  await page.waitForSelector(PRODUCT_URL);
+
   await enqueueLinks({
-    selector: CATEGORY_URL,
-    label: labels.CATEGORY
+    selector: PRODUCT_URL,
+    label: labels.PRODUCT
   });
+
+  const nextButton = await page.$(NEXT_PAGE);
+  if (nextButton) {
+    await nextButton.click();
+
+    const nextPageUrl = page.url();
+    log.debug(`Next Page URL: ${nextPageUrl}`);
+
+    await enqueueLinks({
+      urls: [nextPageUrl]
+    });
+  }
 });
