@@ -1,24 +1,22 @@
 import { Actor } from 'apify'
 import { PlaywrightCrawler, log } from 'crawlee'
-import { router } from './route.js'
+import { router } from './routes.js'
+import { BASE_URL } from './constants.js'
 
 await Actor.init()
 
-// This is better set with CRAWLEE_LOG_LEVEL env var
-// or a configuration option. This is just for show 😈
 log.setLevel(log.LEVELS.DEBUG)
-
 log.debug('Setting up crawler.')
-const crawler = new PlaywrightCrawler({
-  // I'm using a low maxRequestsPerCrawl so the
-  // crawler ends quicker for demo purposes
-  maxRequestsPerCrawl: 50,
 
-  // Instead of the long requestHandler with
-  // if clauses we provide a router instance.
-  requestHandler: router
+const crawler = new PlaywrightCrawler({
+  maxRequestsPerCrawl: 50,
+  requestHandler: router,
+  headless: true
 })
 
-await crawler.run(['https://warehouse-theme-metal.myshopify.com/collections'])
+const Urls: string[] = [
+  `${BASE_URL}/c/sapatos`,
+];
 
+await crawler.run(Urls)
 await Actor.exit()
