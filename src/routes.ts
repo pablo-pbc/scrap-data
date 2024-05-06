@@ -56,7 +56,7 @@ router.addHandler(labels.PRODUCT, async ({ request, page, log }) => {
   const results = {
     url: request.url,
     name,
-    code,
+    code: code?.split('Referência: ')[1],
     color,
     brand,
     collection,
