@@ -7,6 +7,7 @@ import {
   PRODUCT_NAME,
   PRODUCT_CODE,
   PRODUCT_COLOR,
+  PRODUCT_SIZES,
   PRODUCT_DESCRIPTION,
   PRODUCT_PRICE,
   PRODUCT_SPECIAL_PRICE,
@@ -27,6 +28,7 @@ router.addHandler(labels.PRODUCT, async ({ request, page, log }) => {
   const code = await page.locator(PRODUCT_CODE).textContent();   
   const price = await page.locator(PRODUCT_PRICE).textContent();
   const category = await page.locator(PRODUCT_CATEGORY).allInnerTexts(); 
+  const sizes = await page.locator(PRODUCT_SIZES).allInnerTexts();
   const description = await page.locator(PRODUCT_DESCRIPTION).textContent();
 
   const brand = PRODUCT_BRAND;
@@ -59,6 +61,7 @@ router.addHandler(labels.PRODUCT, async ({ request, page, log }) => {
     code: code?.split('Referência: ')[1],
     color,
     brand,
+    sizes: sizes.length > 1 ? sizes : ["TU"],
     collection,
     gender,
     description,
