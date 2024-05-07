@@ -21,6 +21,7 @@ export const PRODUCT_DESCRIPTION: string = 'div[data-testid="tech-info"] > div >
 export const PRODUCT_PRICE: string = 'span.bPYemK';
 export const PRODUCT_SPECIAL_PRICE: string = 'span[data-testid="pricebox"]';
 export const PRODUCT_IMAGES: string = 'ul[data-testid="main-image"] > li > a > span > img';
+export const PRODUCT_SIZES: string = 'div[data-testid="product-sizes"] > span label'
 export const PRODUCT_MATERIAL: string = '';
 export const PRODUCT_COLLECTION: string = '';
 export const PRODUCT_GENDER: string = '';
